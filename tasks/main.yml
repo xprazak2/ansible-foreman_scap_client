@@ -13,6 +13,27 @@
     name: "rubygem-foreman_scap_client"
     state: "{{ foreman_scap_client_state }}"
 
+- name: 'Get cert paths from subscription-manager'
+  script: foreman_scap_client_facts.rb
+  register: facts_output
+
+- name: 'Set facts for foreman_scap_client'
+  set_fact:
+    facts_json: "{{ facts_output.stdout }}"
+
+- debug:
+    msg: "Penene"
+
+- name: 'Create facts dir'
+  path: /etc/ansible/facts.d
+  state: directory
+
+- name: 'Create custom facts file'
+  template:
+    src: foreman_scap_client.fact.j2
+    dest: /etc/ansible/facts.d
+    owner: root
+
 - name: 'Create cron in /etc/cron.d/'
   template:
     src: "{{ foreman_scap_client_cron_template }}"
