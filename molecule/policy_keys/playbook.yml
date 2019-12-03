@@ -1,0 +1,34 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: 'Install cronie'
+      yum:
+        name: cronie
+        state: present
+    - name: 'Install subscription-manager'
+      yum:
+        name: subscription-manager
+        state: present
+  roles:
+    - role: ansible-foreman_scap_client
+  vars:
+    foreman_scap_client_repo_state: present
+    foreman_scap_client_server: https://foreman.example.com
+    foreman_scap_client_port: 9090
+    foreman_scap_client_cron_splay_seed: 93
+    foreman_scap_client_http_proxy_server: 'https://proxy.example.com'
+    foreman_scap_client_http_proxy_port: 7475
+    foreman_scap_client_policies: [
+      {
+        "id": "1",
+        "hour": "12",
+        "minute": "1",
+        "month": "*",
+        "monthday": "*",
+        "weekday": "1",
+        "profile_id": "",
+        "content_path": "/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml",
+        "download_path": "/compliance/policies/1/content",
+      }
+    ]
