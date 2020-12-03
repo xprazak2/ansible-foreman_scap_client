@@ -33,8 +33,13 @@ jobs:
 
       - name: Lint code.
         run: |
+          set -e
           yamllint .
           ansible-lint
+
+      - name: The job has succeeded
+        if: ${{ success() }}
+        run: echo 'Is a roaring success'
 
   molecule:
     name: Molecule
@@ -57,7 +62,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker testinfra
+        run: pip3 install -r requirements.txt
 
       - name: Run Molecule tests.
         run: molecule test
