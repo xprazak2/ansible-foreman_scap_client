@@ -10,6 +10,8 @@
       yum:
         name: subscription-manager
         state: present
+    - name: 'Show version'
+      command: 'cat /etc/redhat-release'
   roles:
     - role: theforeman.foreman_scap_client
   vars:
